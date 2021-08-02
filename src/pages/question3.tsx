@@ -18,5 +18,20 @@ export default function Question3() {
 		</Grid>
 		<Typography variant='h5'>Question 3</Typography>
 		<Typography>Convert the providers in src/pages/_app.tsx to use the providerComposer provided in src/providerComposer.tsx</Typography>
+		<hr></hr>
+
+		{/* // Solution //  */}
+
+		<pre>{`
+// See _app.tsx:
+
+<ProviderComposer
+providers={[
+provider(StyledEngineProvider, { injectFirst: true }),
+provider(CacheProvider, { value: cache }),
+provider(ThemeProvider, { theme: theme })]}>
+	<CssBaseline/>
+	<Component {...pageProps}/>
+</ProviderComposer>`}</pre>
 	</Container>;
 }

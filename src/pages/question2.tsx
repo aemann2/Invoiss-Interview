@@ -1,8 +1,33 @@
-import { Container, Grid, ListItemButton, ListItemText, Typography } from '@material-ui/core';
+import { useState } from 'react';
+import { Container, Grid, ListItemButton, ListItemText, Typography, Button } from '@material-ui/core';
+import { styled } from '@material-ui/core/styles';
 import React from 'react';
 import Link from 'next/link';
+import axios from 'axios';
+
+interface state {
+	id: string
+}
 
 export default function Question2() {
+	const [apiData, setApiData] = useState<state[] | []>([])
+
+	const passData = async(input: any[]) => {
+		setApiData([]);
+
+		const res = await axios({
+			method: 'post',
+			url: '/api/hello',
+			data: input
+		});
+
+		if (res.status === 400) {
+			throw new Error('Error');
+		} else {
+			setApiData(res.data);
+		}
+	} 
+
 	return <Container sx={{ pt: 2 }}>
 		<Grid>
 			<Link href='/question1' passHref>
@@ -30,5 +55,35 @@ export default function Question2() {
 		<Typography>
 			You can use any library for this
 		</Typography>
+
+		{/* // Solution //  */}
+
+		<Wrapper>
+		{
+			apiData.map((item,index) => 
+					<p key={index}>id: {item.id}</p>
+				)
+			}
+			</Wrapper>
+		<Wrapper>
+			<Button onClick={() => passData([
+			{
+				id: '123',
+				name: 'test'
+			}])} 
+			variant='contained' color='primary'>Data without error</Button>
+			<Button onClick={() => passData([
+			{
+				id: '123',
+				name: 'test@test.com'
+			}])} 
+			variant='contained' color='secondary'>Data with error</Button>
+		</Wrapper>
 	</Container>;
 }
+
+const Wrapper = styled(Container)({
+	marginTop: '2rem',
+	display: 'flex',
+	justifyContent: 'space-evenly'
+});
